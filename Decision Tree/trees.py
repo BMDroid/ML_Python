@@ -19,9 +19,10 @@ def calcShannonEnt(dataset):
     labelCounts = {}
     for featVec in dataset:
         currentLabel = featVec[-1]
-        if currentLabel not in labelCounts.keys():
-            labelCounts[currentLabel] = 0
-        labelCounts[currentLabel] += 1
+        labelCounts[currentLabel] = 1 + labelCounts.get(currentLabel, 0)
+#       if currentLabel not in labelCounts.keys():
+#       labelCounts[currentLabel] = 0
+#       labelCounts[currentLabel] += 1
     shannonEnt = 0.0
     for key in labelCounts:
         prob = labelCounts.get(key) / numEntries
@@ -100,9 +101,10 @@ def majorityCnt(classList):
     """
     classCount = {}
     for vote in classList:
-        if vote not in classCount.keys():
-            classCount[vote] = 0
-        classCount[vote] += 1
+        classCount[vote] = 1 + classCount.get(vote, 0)
+#       if vote not in classCount.keys():
+#           classCount[vote] = 0
+#       classCount[vote] += 1
     sortedClassCount = sorted(
         classCount.items(), key=operator.itemgetter(1), reverse=True)  # sorted list contains tuples
     return sortedClassCount[0][0]
@@ -159,7 +161,7 @@ def classify(inputTree, featLabels, testVec):
     featIndex = featLabels.index(firstStr)
     testFeat = testVec[featIndex]
     for key in list(secondDict.keys()):
-        if key == testFeat:
+        if testFeat == key:
             if type(secondDict[key]).__name__ == 'dict':
                 return classify(secondDict[key], featLabels, testVec)
             else:
